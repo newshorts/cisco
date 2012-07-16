@@ -1,0 +1,145 @@
+<!-- 
+    Author: Mike Newell © 2012
+-->
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<!-- <html manifest="cache.manifest"> -->
+<html>    
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        
+<!--        <meta name="viewport" content="width=device-width,initial-scale=1">	
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-touch-fullscreen" content="yes" />-->
+        
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="css/reset.css" />
+        <link rel="stylesheet" type="text/css" href="css/style.css" />
+        <script src="js/video.js"></script>
+
+		<!-- <script type="text/javascript">
+
+		  function logEvent(event) {
+		      console.log(event.type);
+		  }
+
+		  window.applicationCache.addEventListener('checking',logEvent,false);
+		  window.applicationCache.addEventListener('noupdate',logEvent,false);
+		  window.applicationCache.addEventListener('downloading',logEvent,false);
+		  window.applicationCache.addEventListener('cached',logEvent,false);
+		  window.applicationCache.addEventListener('updateready',logEvent,false);
+		  window.applicationCache.addEventListener('obsolete',logEvent,false);
+		  window.applicationCache.addEventListener('error',logEvent,false);
+
+		  </script> -->
+		
+		<video id="cisco_video" preload="auto">
+			<source src="video/video_whole.mp4" width="2048" height="1536" type='video/mp4'>
+			<source src="video/video_whole.webm" width="2048" height="1536" type='video/webm'>
+			<source src="video/video_whole.ogv" width="2048" height="1536" type='video/ogv'>
+		</video>
+		
+        <script>
+			(function($) {
+				           	 $(window).load(function() {
+			               
+								var video = document.getElementById('cisco_video');
+								
+								// console.dir(video);
+																			
+					
+					$('.clicker').hide();
+
+
+					
+                    // timing and events
+                    $('#overlay').on('touchstart click', function(evt) {
+						// console.log('overlay clicked');
+                        $(this).hide();
+						video.play();
+						video.addEventListener('timeupdate', function(){
+							console.log(video.currentTime);
+							if (video.currentTime <= 6.5) {
+								video.play();
+							} else {
+								video.pause();
+							}
+						});
+						$('#clicker1').delay(6000).fadeIn();
+                        
+					});
+
+
+                    
+                    $('#clicker1').on('touchend click', function(evt) {
+                        $(this).hide();
+						video.play();
+						video.addEventListener('timeupdate', function(){
+							console.log(video.currentTime);
+							if (video.currentTime <= 12.0) {
+								video.play();
+							} else {
+								video.pause();
+							}
+						});
+						$('#clicker2').delay(6000).fadeIn();
+                        
+                    });
+
+                    $('#clicker2').on('touchend click', function(evt) {
+                        $(this).hide();
+						video.play();
+						video.addEventListener('timeupdate', function(){
+							console.log(video.currentTime);
+							if (video.currentTime <= 18.0) {
+								video.play();
+							} else {
+								video.pause();
+							}
+						});
+                        $('#clicker3').delay(3000).fadeIn();
+                    });
+                    
+                    $('#clicker3').on('touchend click', function(evt) {
+                        $(this).hide();
+						video.play();
+						video.addEventListener('timeupdate', function(){
+							console.log(video.currentTime);
+							if (video.currentTime <= 20.0) {
+								video.play();
+							} else {
+								video.pause();
+							}
+						});
+                    });
+                    
+                    video.addEventListener('ended', function(evt) {
+                        
+                        setTimeout(function() {
+                            var r = confirm('Restart?');
+                        
+                            if(r == true) {
+                                $('#overlay').show();;
+                            }
+                        }, 5000);
+                        
+                    });
+                    
+                });
+            })(jQuery);
+        </script>
+    </head>
+    <body>
+        <div id="wrap" class="retina">
+            <div id="clicker3" class="clicker"></div>
+            <div id="clicker2" class="clicker"></div>
+            <div id="clicker1" class="clicker"></div>
+            <div  class="retina" id="overlay"></div>
+        </div>
+    </body>
+</html>

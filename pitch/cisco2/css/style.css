@@ -1,0 +1,68 @@
+/* 
+    Document   : style
+    Created on : Jun 18, 2012, 3:01:37 PM
+    Author     : mike_newell
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+root { 
+    display: block;
+}
+
+.retina {
+    width: 2048px;
+    height: 1536px;
+}
+
+#wrap {
+    position: relative;
+    top: 0;
+    left: 0;
+    margin: 0;
+    padding: 0;
+}
+
+#cisco_video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+#overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 5;
+	display: block; 
+}
+
+.clicker {
+    position: absolute;
+    z-index: 6;
+    width: 200px;
+    height: 200px;
+    background-color: red;
+/*  display: none;
+*/}
+
+#clicker1 {
+	top: 504px;
+	left: 260px;
+	background-color: red;
+}
+
+#clicker2 {
+    top: 683px;
+    left: 354px;
+	background-color: white;
+
+}
+
+#clicker3 {
+	top: 342px;
+	left: 749px;
+	background-color: black;
+
+}
