@@ -51,7 +51,7 @@ Author: Mike Newell © 2012
              *
              ******************************************************************/
             
-            var particleCount = 1800,
+            var particleCount = 100,
                 particles = new THREE.Geometry(),
                 pMaterial = new THREE.ParticleBasicMaterial({
                     color: 0x000000,
@@ -88,10 +88,33 @@ Author: Mike Newell © 2012
             function update() {
                 particleSystem.rotation.y += 0.01;
                 
+                // do work on particles
+                var pCount = particleCount;
+                
+                while(pCount--) {
+                    // get the particle
+                    var particle = particles.vertices[pCount];
+                    
+                    // if its out of range, reset
+                    if(particle.y < -200) {
+                        particle.y = 200;
+                        particle.velocity.y = 0;
+                    }
+                    
+                    particle.velocity.y -= Math.random() * 0.01;
+                    
+                    particle.addSelf(particle.velocity);
+                    
+                }
+                
+                // flag the system that we've updated some vertices
+                particleSystem.geometry.__dirtyVertices = true;
+                
                 renderer.render(scene, camera);
                 
                 requestAnimationFrame(update);
             }
+            
             requestAnimationFrame(update);
                 
         </script>
