@@ -1,0 +1,120 @@
+<!-- 
+
+Author: Mike Newell © 2012
+
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" type="text/css" href="css/style.css" />
+    </head>
+    <body>
+        <div id="wrap">
+            
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <script src="js/three.js"></script>
+        <script>
+            /*******************************************************************
+             *
+             *  SETUP
+             *
+             ******************************************************************/
+            var WIDTH = 400,
+                HEIGHT = 300;
+                
+            var VIEW_ANGLE = 45,
+                ASPECT = WIDTH/HEIGHT,
+                NEAR = 0.1,
+                FAR = 10000;
+                
+            var container = $('#wrap');
+            
+            var renderer = new THREE.WebGLRenderer();
+            var camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
+            
+            var scene = new THREE.Scene();
+            scene.add(camera);
+            camera.position.z = 300;
+            
+            renderer.setSize(WIDTH, HEIGHT);
+            
+            container.append(renderer.domElement);
+            
+            /*******************************************************************
+             *
+             *  PARTICLE SYSTEM
+             *
+             ******************************************************************/
+            
+            var shapeCount = 20,
+                shapes = new THREE.Geometry(),
+                sMaterial = new THREE.ParticleBasicMaterial({
+                    color: 0x000000,
+                    size: 20,
+                    blending: THREE.AdditiveBlending,
+                    transparent: true
+                });
+                
+            for(var s = 0; s < shapeCount; s++) {
+                
+                var pts;
+                
+                // generate 5 3D points per shape
+                for(var i = 0; i < 5; i++) {
+                   pts.push(new THREE.Vector3( (Math.Random()*500 - 250), (Math.Random()*500 - 250), (Math.Random()*500 - 250) ));
+                }
+                
+                var shape = new THREE.Shape(pts);
+                
+                shapes.push(shape);
+            }
+            
+            var particleSystem = new THREE.ParticleSystem(shapes, sMaterial);
+            
+            particleSystem.sortParticles = true;
+            
+            scene.add(particleSystem);
+            
+            /*******************************************************************
+             *
+             *  RENDER
+             *
+             ******************************************************************/
+            
+            function update() {
+                particleSystem.rotation.y += 0.01;
+                
+                // do work on particles
+                var pCount = particleCount;
+                
+                while(pCount--) {
+                    // get the particle
+                    var particle = particles.vertices[pCount];
+                    
+                    // if its out of range, reset
+                    if(particle.y < -200) {
+                        particle.y = 200;
+                        particle.velocity.y = 0;
+                    }
+                    
+                    particle.velocity.y -= Math.random() * 0.01;
+                    
+                    particle.addSelf(particle.velocity);
+                    
+                }
+                
+                // flag the system that we've updated some vertices
+                particleSystem.geometry.__dirtyVertices = true;
+                
+                renderer.render(scene, camera);
+                
+                requestAnimationFrame(update);
+            }
+            
+            requestAnimationFrame(update);
+        </script>
+    </body>
+</html>
