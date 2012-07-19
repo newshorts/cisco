@@ -1,0 +1,16 @@
+.nodeContainer {
+    position: absolute;
+    width: 960px;
+    height: 540px;
+    top: 0;
+    left: 0;
+}
+
+.node {
+    position: absolute;
+    width: 145px;
+    height: 145px;
+    background: url(../images/node-bg.png) scroll no-repeat;
+    
+    -webkit-transition: opacity 1s;
+}

@@ -1,0 +1,198 @@
+<!-- 
+
+Author: Mike Newell © 2012
+
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" type="text/css" href="css/style.css" />
+    </head>
+    <body>
+        <div id="wrap">
+            
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <script src="js/three.js"></script>
+        <script>
+            
+            /*******************************************************************
+             *  BASIC SETUP
+             ******************************************************************/
+            
+            var WIDTH = 960,
+                HEIGHT = 540;
+                
+            var VIEW_ANGLE = 45,
+                ASPECT = WIDTH/HEIGHT,
+                NEAR = 0.1,
+                FAR = 10000;
+                
+            var container = $('#wrap');
+            
+            var renderer = new THREE.WebGLRenderer();
+            
+            var camera = new THREE.PerspectiveCamera(
+                VIEW_ANGLE,
+                ASPECT,
+                NEAR,
+                FAR
+            );
+                
+            var scene = new THREE.Scene();
+            
+            scene.add(camera);
+            camera.position.z = 300;
+            
+            renderer.setSize(WIDTH, HEIGHT);
+            
+            container.append(renderer.domElement);
+            
+            /*******************************************************************
+             *  LINES
+             ******************************************************************/
+           
+            var line1 = function() {
+                var lineMaterial = new THREE.LineBasicMaterial({color: 0xffffff});
+
+                var lineGeometry = new THREE.Geometry();
+                
+                lineGeometry.vertices.push(new THREE.Vector3(-100,0,0));
+                lineGeometry.vertices.push(new THREE.Vector3(0,100,0));
+
+                var line = new THREE.Line(lineGeometry, lineMaterial);
+
+                scene.add(line);
+            }
+            
+            var line2 = function() {
+                var lineMaterial = new THREE.LineBasicMaterial({color: 0xffffff});
+
+                var lineGeometry = new THREE.Geometry();
+                
+                lineGeometry.vertices.push(new THREE.Vector3(-10,0,0));
+                lineGeometry.vertices.push(new THREE.Vector3(0,10,0));
+                lineGeometry.vertices.push(new THREE.Vector3(10,0,0));
+
+                var line = new THREE.Line(lineGeometry, lineMaterial);
+
+                scene.add(line);
+            }
+            
+            var line3 = function() {
+                var lineMaterial = new THREE.LineBasicMaterial({color: 0xffffff});
+
+                var lineGeometry = new THREE.Geometry();
+
+                lineGeometry.vertices.push(new THREE.Vector3(-10,0,0));
+                lineGeometry.vertices.push(new THREE.Vector3(0,10,0));
+                lineGeometry.vertices.push(new THREE.Vector3(10,0,0));
+
+                var line = new THREE.Line(lineGeometry, lineMaterial);
+
+                scene.add(line);
+            }
+            
+            line1();
+            line2();
+            line3();
+            
+            /*******************************************************************
+             *  CIRCLES
+             ******************************************************************/
+            
+            var circle1 = function() {
+                var circleGeometry = new THREE.Geometry();
+                var circleMaterial = new THREE.ParticleBasicMaterial({
+                    color: 0xffffff,
+                    size: 145,
+                    map: THREE.ImageUtils.loadTexture("images/node-bg.png"),
+                    blending: THREE.AdditiveBlending,
+                    transparent: true
+                });
+
+                var loc = new THREE.Vector3(10, 0, 0);
+
+                circleGeometry.vertices.push(loc);
+
+                var particleSystem = new THREE.ParticleSystem(circleGeometry, circleMaterial);
+
+                particleSystem.sortParticles = true;
+
+                scene.add(particleSystem);
+            }
+            
+            var circle2 = function() {
+                var circleGeometry = new THREE.Geometry();
+                var circleMaterial = new THREE.ParticleBasicMaterial({
+                    color: 0xffffff,
+                    size: 145,
+                    map: THREE.ImageUtils.loadTexture("images/node-bg.png"),
+                    blending: THREE.AdditiveBlending,
+                    transparent: true
+                });
+
+                var loc = new THREE.Vector3(10, 0, 0);
+
+                circleGeometry.vertices.push(loc);
+
+                var particleSystem = new THREE.ParticleSystem(circleGeometry, circleMaterial);
+
+                particleSystem.sortParticles = true;
+
+                scene.add(particleSystem);
+            }
+            
+            var circle3 = function() {
+                var circleGeometry = new THREE.Geometry();
+                var circleMaterial = new THREE.ParticleBasicMaterial({
+                    color: 0xffffff,
+                    size: 145,
+                    map: THREE.ImageUtils.loadTexture("images/node-bg.png"),
+                    blending: THREE.AdditiveBlending,
+                    transparent: true
+                });
+
+                var loc = new THREE.Vector3(10, 0, 0);
+
+                circleGeometry.vertices.push(loc);
+
+                var particleSystem = new THREE.ParticleSystem(circleGeometry, circleMaterial);
+
+                particleSystem.sortParticles = true;
+
+                scene.add(particleSystem);
+            }
+            
+            circle1();
+            circle2();
+            circle3();
+            
+            /*******************************************************************
+             *  RENDER
+             ******************************************************************/
+            function animate() {
+                requestAnimationFrame(animate);
+                renderer.render(scene, camera);
+//                camera.rotation.z += 0.01
+            }
+            
+            animate();
+            
+        </script>
+        
+        <script>
+            (function($) {
+                $(window).load(function() {
+                    
+                    var height = window.innerHeight;
+                    
+                    $('body').css({height: height+'px'});
+                    
+                });
+            })(jQuery);
+        </script>
+    </body>
+</html>
