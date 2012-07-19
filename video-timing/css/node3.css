@@ -5,13 +5,13 @@
 }
 
 #node3Container .subnode1 {
-    top: 100px;
-    left: 609px;
+    top: 200px;
+    left: 409px;
     opacity: 0;
 }
 
 #node3Container .subnode2 {
-    top: 50px;
-    left: 100px;
+    top: 500px;
+    left: 200px;
     opacity: 0;
 }

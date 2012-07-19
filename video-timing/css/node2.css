@@ -6,12 +6,12 @@
 
 #node2Container .subnode1 {
     top: 100px;
-    left: 609px;
+    left: 409px;
     opacity: 0;
 }
 
 #node2Container .subnode2 {
     top: 50px;
-    left: 100px;
+    left: 300px;
     opacity: 0;
 }

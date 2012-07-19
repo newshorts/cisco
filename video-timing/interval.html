@@ -80,8 +80,8 @@
                 height: 100px;
                 color: #040;
                 position: absolute;
-                top: 300px;
-                left: 600px;
+                top: 100px;
+                left: 400px;
                 
                 -webkit-transition: opacity 1s;
             }
@@ -92,8 +92,8 @@
                 height: 100px;
                 color: #040;
                 position: absolute;
-                top: 300px;
-                left: 600px;
+                top: 400px;
+                left: 200px;
                 
                 -webkit-transition: opacity 1s;
             }
@@ -116,7 +116,7 @@
     </head>
     <body>
         <div id="wrap">
-            <canvas id="lineCanvas"></canvas>
+            <canvas id="lineCanvas" width="960" height="540"></canvas>
             <video id="video">
                 <source src="videos/tall.mp4">
                 <source src="videos/tall.ogv">
@@ -191,6 +191,9 @@
                     
                     // click events
                     linkTN1.on('click', function(evt) {
+                        // setup canvas
+                        NNode.init();
+                        
                         Movie.minimize();
                         NNode.showNode1();
                     });

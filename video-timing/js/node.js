@@ -4,8 +4,13 @@ var NNode = {
     subnode1: {},
     subnode2: {},
     lineCanvas: $('#lineCanvas'),
-    canvas: document.getElementById('lineCanvas'),
+    canvas: {},
+    ctx: {},
     animationFrameID: {},
+    init: function() {
+        this.canvas = this.lineCanvas[0];
+        this.ctx = this.canvas.getContext('2d');
+    },
     showNode1: function() {
         // set objects so we know what to reset if it's called
         this.nodeContainer = $('#node1Container');
@@ -89,27 +94,35 @@ var NNode = {
         
         // set local variable context
         var canvas = this.canvas;
-        var ctx = canvas.getContext('2d');
+        var ctx = this.ctx;
+        
+        ctx.lineWidth = 2;
+        ctx.lineCap = 'round';
+        ctx.strokeStyle = "rgba(255, 255, 255, .1)";
         
         // draw line from start to main node
         ctx.beginPath();
         ctx.moveTo(600, 300);
         ctx.lineTo(mainNodePos.left, mainNodePos.top);
+        ctx.closePath();
         ctx.stroke();
+        
         
         // draw line from main node to subnode1
         ctx.beginPath();
         ctx.moveTo(mainNodePos.left, mainNodePos.top);
         ctx.lineTo(subnode1Pos.left, subnode1Pos.top);
+        ctx.closePath();
         ctx.stroke();
         
         // draw line from main node to subnode2
         ctx.beginPath();
         ctx.moveTo(mainNodePos.left, mainNodePos.top);
         ctx.lineTo(subnode2Pos.left, subnode2Pos.top);
+        ctx.closePath();
         ctx.stroke();
         
-        console.log('sanity')
+//        console.log('sanity')
     },
     loop: function() {
 //        this.animationFrameID = requestAnimationFrame(this.loop);
