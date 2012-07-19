@@ -1,0 +1,249 @@
+<!-- 
+
+    Author: Mike Newell © 2012
+
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" type="text/css" href="css/style.css" />
+        <style>
+            
+            /*******************************************************************
+            *  STYLES
+            *******************************************************************/
+            @import url(http://fonts.googleapis.com/css?family=Open+Sans:400,300,600);
+            body {
+                background: #fff;
+                background: -webkit-gradient(linear, left top, left bottom, from(#9f9f9f), to(#fff));
+                background: -moz-linear-gradient(top,  #9f9f9f,  #fff);
+                width: 95%;     
+                
+                font-family: 'Open Sans', sans-serif;
+                font-size: 16px;
+                color: white;
+            }
+            
+            a {
+                text-decoration: none;
+                color: #fbfbfb;
+                font-weight: bold;
+                font-size: 22.5px;
+            }
+            
+            #wrap {
+                position: relative;
+                width: 960px;
+                height: 540px;
+                margin: 0 auto;
+                top: 200px;
+            }
+            
+            #video {
+                width: 960px;
+                height: 540px;
+                position: absolute;
+                top: 0;
+                left: 0;
+            }
+            
+            #overlayContainer {
+                width: 960px;
+                height: 540px;
+                position: absolute;
+                top: 0;
+                left: 0;
+            }
+            
+            #linkToNode1 {
+                opacity: 0;
+                width: 300px;
+                height: 100px;
+                color: #040;
+                position: absolute;
+                top: 300px;
+                left: 600px;
+                
+                -webkit-transition: opacity 1s;
+            }
+            
+            #lineToNode1 {
+                height: 3px;
+                width: 0;
+                background-color: white;
+                -webkit-transform: rotate(38deg);
+                position: absolute;
+                top: 270px;
+                left: 480px;
+            }
+            
+            #node1 {
+                width: 145px;
+                height: 145px;
+                background: url(images/node-bg.png) scroll no-repeat;
+                position: absolute;
+                top: 0px;
+                left: 409px;
+                opacity: 0;
+                padding: 6% 0 0 4%;
+                
+                -webkit-transition: opacity .8s;
+            }
+            
+            #metaNode1 {
+                width: 145px;
+                position: absolute;
+                top: 27px;
+                left: 253px;
+                opacity: 0;
+                
+                -webkit-transition: opacity .4s;   
+            }
+            
+            /*******************************************************************
+            *  ANIMATIONS
+            *******************************************************************/
+            
+            .minimize {
+                -webkit-animation: minimize 1s linear 0s 1;
+                -webkit-animation-fill-mode: forwards;
+            }
+            
+            @-webkit-keyframes minimize {
+                0% { width: 100%; height: 100%; top: 0px; left: 0px; position: absolute; }
+                100% { width: 30%; height: 30%; top: 378px; left: 762px; position: absolute; }
+            }
+            
+            .maximize {
+                -webkit-animation: maximize 1s linear 0s 1;
+                -webkit-animation-fill-mode: backwards;
+            }
+            
+            @-webkit-keyframes maximize {
+                0% { width: 30%; height: 30%; top: 378px; left: 762px; position: absolute; }
+                100% { width: 100%; height: 100%; top: 0px; left: 0px; position: absolute; }
+            }
+            
+            .growLineToNode1 {
+                -webkit-animation: growLineToNode1 1s linear 0s 1;
+                -webkit-animation-fill-mode: forwards;
+            }
+            
+            @-webkit-keyframes growLineToNode1 {
+                0% { width: 0px; }
+                100% { width: 480px; }
+            }
+            
+            .nodeFloat {
+                -webkit-animation: nodeFloat 5s linear 0s infinite;
+                -webkit-animation-fill-mode: forwards;
+            }
+            
+            @-webkit-keyframes nodeFloat {
+                0% { top: 0px; left: 409px; }
+                1% { left: 416.5px; }
+                49% { left: 403.5px; }
+                50% { top: 5px; }
+                100% { top: 0px; left: 409px; }
+            }
+            
+        </style>
+    </head>
+    <body>
+        <div id="wrap">
+            <video id="video" controls="controls">
+                <source src="videos/tall.mp4">
+                <source src="videos/tall.ogv">
+                <source src="videos/tall.webm">
+            </video>
+            <div id="overlayContainer">
+                <div id="linkToNode1"><a href="javascript:return void(0);">Link to Interactive content</a></div>
+                <div id="lineToNode1"></div>
+                <div id="node1"><a href="javascript: return void(0);">Node 1</a></div>
+                <div id="metaNode1">This is some random meta information about node 1.</div>
+            </div>
+        </div>
+        <button id="clear">Back to the story</button>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <script src="http://popcornjs.org/code/dist/popcorn-complete.min.js"></script>
+        <script src="js/popcorn.code.js"></script>
+        <script>
+            
+            (function($) {
+                $(window).load(function() {
+                    
+                    var height = window.innerHeight;
+                    
+                    var linkTN1 = $('#linkToNode1'),
+                        lineTN1 = $('#lineToNode1');
+                    
+                    
+                    $('body').css({height: height+'px'});
+                    
+                    var pop = Popcorn('#video'),
+                        popVideo = $('#video');
+                        
+                    pop.play();
+  
+                    pop.code({
+                        start: 20,
+                        end: 21,
+                        onStart: function(options) {
+                            // pause the video
+                            pop.pause();
+                            
+                            // show the interactive link
+                            linkTN1.css({ opacity: 1 });
+                            
+                            console.log(options);
+                        },
+                        onEnd: function(options) {
+                        pop.play();
+                            console.log(options);
+                        }
+                    });
+                    
+                    // functions
+                    
+                    var repositionVideo = function() {
+                        
+                        popVideo.addClass('minimize');
+                        lineTN1.addClass('growLineToNode1');
+                        
+                        linkTN1.css({ opacity: 0 });
+                        
+                    }
+                    
+                    // events
+                    linkTN1.find('a').on('click', function(evt) {
+                        // init the animation sequence to resize the movie and reposition it
+                        repositionVideo();
+                    });
+                    
+                    $('.growLineToNode1').live('animationend webkitAnimationEnd', function(evt) {
+                        // fade the circle in
+                        $('#node1').css({ opacity: 1 }).addClass('nodeFloat');
+                    });
+                    
+                    $('#node1 a').hover(function(evt) {
+                        $('#metaNode1').css({ opacity: 1 });
+                    }, function(evt) {
+                        $('#metaNode1').css({ opacity: 0 });
+                    });
+                    
+                    $('#clear').on('click', function(evt) {
+                        // reset everything
+                        popVideo.removeClass().addClass('maximize');
+                        $('#overlayContainer').fadeOut('slow').hide();
+                        // play the video again
+                        pop.play();
+                    });
+                    
+                });
+            })(jQuery);
+        
+        </script>
+    </body>
+</html>
