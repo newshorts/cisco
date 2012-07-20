@@ -1,0 +1,23 @@
+.minimize {
+    z-index: 100;
+    
+    -webkit-animation: minimize 1s linear 0s 1;
+    -webkit-animation-fill-mode: forwards;
+}
+
+@-webkit-keyframes minimize {
+    0% { width: 100%; height: 100%; top: 0px; left: 0px; position: absolute; }
+    100% { width: 30%; height: 30%; top: 378px; left: 762px; position: absolute; }
+}
+
+.maximize {
+    z-index: 50;
+    
+    -webkit-animation: maximize 1s linear 0s 1;
+    -webkit-animation-fill-mode: backwards;
+}
+
+@-webkit-keyframes maximize {
+    0% { width: 30%; height: 30%; top: 378px; left: 762px; position: absolute; }
+    100% { width: 100%; height: 100%; top: 0px; left: 0px; position: absolute; }
+}

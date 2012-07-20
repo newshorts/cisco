@@ -1,0 +1,235 @@
+<!-- 
+
+    Author: Mike Newell © 2012
+
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" type="text/css" href="css/style.css" />
+        <link rel="stylesheet" type="text/css" href="css/movie.css" />
+        <style>
+            
+            /*******************************************************************
+            *  STYLES
+            *******************************************************************/
+            
+            @import url(http://fonts.googleapis.com/css?family=Open+Sans:400,300,600);
+            
+            body {
+                background: #fff;
+                background: -webkit-gradient(linear, left top, left bottom, from(#9f9f9f), to(#fff));
+                background: -moz-linear-gradient(top,  #9f9f9f,  #fff);
+                width: 95%;     
+                
+                font-family: 'Open Sans', sans-serif;
+                font-size: 16px;
+                color: white;
+            }
+            
+            a {
+                text-decoration: none;
+                color: #fbfbfb;
+                font-weight: bold;
+                font-size: 22.5px;
+            }
+            
+            #wrap {
+                position: relative;
+                width: 960px;
+                height: 540px;
+                margin: 0 auto;
+                top: 200px;
+            }
+            
+            #video {
+                width: 960px;
+                height: 540px;
+                position: absolute;
+                top: 0;
+                left: 0;
+            }
+            
+            #videoNode1 {
+                width: 960px;
+                height: 540px;
+                position: absolute;
+                top: 0;
+                left: 0;
+            }
+            
+            #underlayContainer {
+                width: 960px;
+                height: 540px;
+                position: absolute;
+                top: 0;
+                left: 0;
+            }
+            
+            #linkToNode1 {
+                opacity: 0;
+                width: 300px;
+                height: 100px;
+                color: #fbfbfb;
+                position: absolute;
+                top: 300px;
+                left: 600px;
+                
+                -webkit-transition: opacity 1s;
+            }
+            
+            #linkToNode2 {
+                opacity: 0;
+                width: 300px;
+                height: 100px;
+                color: #fbfbfb;
+                position: absolute;
+                top: 100px;
+                left: 400px;
+                
+                -webkit-transition: opacity 1s;
+            }
+            
+            #linkToNode3 {
+                opacity: 0;
+                width: 300px;
+                height: 100px;
+                color: #fbfbfb;
+                position: absolute;
+                top: 400px;
+                left: 200px;
+                
+                -webkit-transition: opacity 1s;
+            }
+            
+            #lineCanvas {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 960px;
+                height: 540px;
+            }
+            
+            /*******************************************************************
+            *  ANIMATIONS
+            *******************************************************************/
+            
+        </style>
+    </head>
+    <body>
+        <div id="preload">
+            
+        </div>
+        <div id="wrap">
+            <canvas id="lineCanvas" width="960" height="540"></canvas>
+            <div id="underlayContainer"></div>
+            <video id="video">
+                <source src="videos/main/tall.mp4">
+                <source src="videos/main/tall.ogv">
+                <source src="videos/main/tall.webm">
+            </video>
+            <video id="videoNode1">
+                <source src="videos/node1/node1.mp4">
+                <source src="videos/node1/node1.ogv">
+                <source src="videos/node1/node1.webm">
+            </video>
+            <a href="#" id="linkToNode1">Node 1</a>
+            <a href="#" id="linkToNode2">Node 2</a>
+            <a href="#" id="linkToNode3">Node 3</a>
+            
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <script src="http://popcornjs.org/code/dist/popcorn-complete.min.js"></script>
+        <script src="js/popcorn.code.js"></script>
+        <script src="js/requestanimationframe.js"></script>
+        <script src="js/timing.js"></script>
+        <script src="js/movie.js"></script>
+        <script src="js/node.js"></script>
+        <script>
+            
+            (function($) {
+                $(window).load(function() {
+                    
+                    /*******************************************************************
+                    *  SETUP
+                    *******************************************************************/
+                    var height = window.innerHeight;
+                    $('body').css({height: height+'px'});
+                    
+                    var linkTN1 = $('#linkToNode1'),
+                        linkTN2 = $('#linkToNode2'),
+                        linkTN3 = $('#linkToNode3');
+                    
+                    /*******************************************************************
+                    *  EVENTS
+                    *******************************************************************/
+                    
+                    // custom events
+                    document.addEventListener('showLinkToNode1', function(evt) {
+                        linkTN2.css({ 'z-index': 1 });
+                        linkTN3.css({ 'z-index': 1 });
+                        linkTN1.css({ opacity: 1, 'z-index': 100 });
+                    }, false);
+                    
+                    document.addEventListener('showLinkToNode2', function(evt) {
+                        linkTN1.css({ 'z-index': 1 });
+                        linkTN3.css({ 'z-index': 1 });
+                        linkTN2.css({ opacity: 1, 'z-index': 100 });
+                    }, false);
+                    
+                    document.addEventListener('showLinkToNode3', function(evt) {
+                        linkTN1.css({ 'z-index': 1 });
+                        linkTN2.css({ 'z-index': 1 });
+                        linkTN3.css({ opacity: 1, 'z-index': 100 });
+                    }, false);
+                    
+                    // click events
+                    linkTN1.on('click', function(evt) {
+                        evt.preventDefault();
+                        
+                        // setup canvas
+                        NNode.init();
+                        
+                        Movie.minimize();
+                        NNode.showNode1();
+                    });
+                    
+                    linkTN2.on('click', function(evt) {
+                        evt.preventDefault();
+                        
+                        Movie.minimize();
+                        NNode.showNode2();
+                    });
+                    
+                    linkTN3.on('click', function(evt) {
+                        evt.preventDefault();
+                        
+                        Movie.minimize();
+                        NNode.showNode3();
+                    });
+                    
+                    Movie.movie.on('click', function(evt) {
+                        evt.preventDefault();
+                        
+                        linkTN1.css({ opacity: 0 });
+                        linkTN2.css({ opacity: 0 });
+                        linkTN3.css({ opacity: 0 });
+                        
+                        Movie.maximize();
+                        NNode.reset();
+                        Timing.pop.play();
+                    });
+                    
+                    /*******************************************************************
+                    *  START
+                    *******************************************************************/
+                    Timing.init();
+
+                });
+            })(jQuery);
+        
+        </script>
+    </body>
+</html>
