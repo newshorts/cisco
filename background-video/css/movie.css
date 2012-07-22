@@ -3,6 +3,7 @@
     
     -webkit-animation: minimize 1s linear 0s 1;
     -webkit-animation-fill-mode: forwards;
+    -webkit-transform: translateZ(0);
 }
 
 @-webkit-keyframes minimize {
@@ -15,6 +16,7 @@
     
     -webkit-animation: maximize 1s linear 0s 1;
     -webkit-animation-fill-mode: backwards;
+    -webkit-transform: translateZ(0);
 }
 
 @-webkit-keyframes maximize {

@@ -7,69 +7,86 @@
 *  node3: 50s
 *  
 *******************************************************************/
-var Timing = {
-    pop: Popcorn('#video'),
-    popVideo: $('#video'),
-    init: function() {
-        this.pop.play();
-        this.node1();
-        this.node2();
-        this.node3();
-    },
-    node1: function() {
-        this.pop.code({
-            start: 2,
-            end: 21,
+
+var Timing = function() {
+    
+    var pop,
+        popVideo,
+        timingOptions;
+        
+    var node1 = function() {
+        pop.code({
+            start: timingOptions.node1,
+            end: timingOptions.node1 + 2,
             onStart: function(options) {
                 // pause the video
-                Timing.pop.pause();
+                pop.pause();
 
                 // show the interactive link
-                Timing.dispatch('showLinkToNode1');
+                dispatch('showLinkToNode1');
             },
             onEnd: function(options) {
-                Timing.pop.play();
+                pop.play();
             }
         });
-    },
-    node2: function() {
-        this.pop.code({
-            start: 4,
-            end: 31,
+    }
+    
+    var node2 = function() {
+        pop.code({
+            start: timingOptions.node2,
+            end: timingOptions.node2 + 2,
             onStart: function(options) {
                 // pause the video
-                Timing.pop.pause();
+                pop.pause();
 
                 // show the interactive link
-                Timing.dispatch('showLinkToNode2');
+                dispatch('showLinkToNode2');
             },
             onEnd: function(options) {
-                Timing.pop.play();
+                pop.play();
             }
         });
-    },
-    node3: function() {
-        this.pop.code({
-            start: 6,
-            end: 51,
+    }
+    
+    var node3 = function() {
+        pop.code({
+            start: timingOptions.node3,
+            end: timingOptions.node3 + 2,
             onStart: function(options) {
                 // pause the video
-                Timing.pop.pause();
+                pop.pause();
 
                 // show the interactive link
-                Timing.dispatch('showLinkToNode3');
+                dispatch('showLinkToNode3');
 
             },
             onEnd: function(options) {
-                Timing.pop.play();
+                pop.play();
 
             }
         });
-    },
-    dispatch: function(name) {
+    }
+    
+    var dispatch = function(name) {
         var evt = document.createEvent("Event");
         evt.initEvent(name, true, true);
         document.dispatchEvent(evt);
     }
     
-}
+    this.init = function(options) {
+        timingOptions = options;
+        
+        // setup
+        pop = Popcorn('#beeVideo');
+        popVideo = $('#beeVideo');
+        
+        // play and listen
+        node1();
+        node2();
+        node3();
+    }
+    
+    this.playMain = function() {
+        pop.play();
+    }
+};

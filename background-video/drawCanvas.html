@@ -1,20 +1,17 @@
 <!-- 
-
     Author: Mike Newell © 2012
-
+-->
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
 -->
 <!DOCTYPE html>
 <html>
     <head>
-        <title></title>
+        <title>Movie</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link rel="stylesheet" type="text/css" href="css/style.css" />
         <link rel="stylesheet" type="text/css" href="css/movie.css" />
         <style>
-            
-            /*******************************************************************
-            *  STYLES
-            *******************************************************************/
             
             @import url(http://fonts.googleapis.com/css?family=Open+Sans:400,300,600);
             
@@ -38,13 +35,23 @@
             
             #wrap {
                 position: relative;
-                width: 960px;
-                height: 540px;
+                top: 100px;
                 margin: 0 auto;
-                top: 200px;
+                width: 960px;
+                height: 540px;
             }
             
-            #video {
+            #node1Animation {
+                width: 960px;
+                height: 540px;
+                position: absolute;
+                top: 0;
+                left: 0;
+                
+                display: none;
+            }
+            
+            #beeVideo {
                 width: 960px;
                 height: 540px;
                 position: absolute;
@@ -52,20 +59,19 @@
                 left: 0;
             }
             
-            #videoNode1 {
-                width: 960px;
-                height: 540px;
-                position: absolute;
-                top: 0;
-                left: 0;
+            #buffer {
+                display: none;
             }
             
-            #underlayContainer {
+            #output {
                 width: 960px;
                 height: 540px;
-                position: absolute;
+                position:absolute;
                 top: 0;
                 left: 0;
+                z-index: 200;
+                
+                -webkit-transition: opacity 1s;
             }
             
             #linkToNode1 {
@@ -74,10 +80,11 @@
                 height: 100px;
                 color: #fbfbfb;
                 position: absolute;
-                top: 300px;
-                left: 600px;
+                top: 0px;
+                left: 0px;
                 
                 -webkit-transition: opacity 1s;
+                z-index: 300;
             }
             
             #linkToNode2 {
@@ -90,6 +97,7 @@
                 left: 400px;
                 
                 -webkit-transition: opacity 1s;
+                z-index: 300;
             }
             
             #linkToNode3 {
@@ -102,56 +110,21 @@
                 left: 200px;
                 
                 -webkit-transition: opacity 1s;
+                z-index: 300;
             }
-            
-            #lineCanvas {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 960px;
-                height: 540px;
-            }
-            
-            /*******************************************************************
-            *  ANIMATIONS
-            *******************************************************************/
-            
         </style>
-    </head>
-    <body>
-        <div id="preload">
-            
-        </div>
-        <div id="wrap">
-            <video id="videoNode1">
-                <source src="videos/node1/node1.mp4">
-                <source src="videos/node1/node1.ogv">
-                <source src="videos/node1/node1.webm">
-            </video>
-            
-            <div id="underlayContainer"></div>
-            <video id="video">
-                <source src="videos/main/tall.mp4">
-                <source src="videos/main/tall.ogv">
-                <source src="videos/main/tall.webm">
-            </video>
-            
-            <a href="#" id="linkToNode1">Node 1</a>
-            <a href="#" id="linkToNode2">Node 2</a>
-            <a href="#" id="linkToNode3">Node 3</a>
-            
-        </div>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
         <script src="http://popcornjs.org/code/dist/popcorn-complete.min.js"></script>
-        <script src="js/popcorn.code.js"></script>
         <script src="js/requestanimationframe.js"></script>
+        <script src="js/popcorn.code.js"></script>
         <script src="js/timing.js"></script>
         <script src="js/movie.js"></script>
-        <script src="js/node.js"></script>
+        <script src="js/nodeAnimation.js"></script>
         <script>
-            
             (function($) {
                 $(window).load(function() {
+                    
+                    console.log(Movie)
                     
                     /*******************************************************************
                     *  SETUP
@@ -162,6 +135,45 @@
                     var linkTN1 = $('#linkToNode1'),
                         linkTN2 = $('#linkToNode2'),
                         linkTN3 = $('#linkToNode3');
+                        
+                    var movie = new Movie();
+                    movie.init();
+                    
+                    var timingOptions = {
+                        node1: 20,
+                        node2: 30,
+                        node3: 51
+                    };
+
+                    var timing = new Timing();
+                    timing.init(timingOptions);
+                    timing.playMain();
+                    
+                    /*******************************************************************
+                    *  ANIMATIONS
+                    *******************************************************************/
+                    var node1Options = {
+                        mainVideoID: 'beeVideo',
+                        nodeAnimationID: 'node1Animation'
+                    }
+                    
+                    var node1Options = {
+                        mainVideoID: 'beeVideo',
+                        nodeAnimationID: 'node1Animation'
+                    }
+
+                    var node1Options = {
+                        mainVideoID: 'beeVideo',
+                        nodeAnimationID: 'node1Animation'
+                    }
+
+                    var node1 = new NodeAnimation(node1Options);
+                    var node2 = new NodeAnimation(node1Options);
+                    var node3 = new NodeAnimation(node1Options);
+                    
+                    node1.init();
+                    node2.init();
+                    node3.init();
                     
                     /*******************************************************************
                     *  EVENTS
@@ -171,66 +183,108 @@
                     document.addEventListener('showLinkToNode1', function(evt) {
                         linkTN2.css({ 'z-index': 1 });
                         linkTN3.css({ 'z-index': 1 });
-                        linkTN1.css({ opacity: 1, 'z-index': 100 });
+                        linkTN1.css({ opacity: 1, 'z-index': 300 });
                     }, false);
                     
                     document.addEventListener('showLinkToNode2', function(evt) {
                         linkTN1.css({ 'z-index': 1 });
                         linkTN3.css({ 'z-index': 1 });
-                        linkTN2.css({ opacity: 1, 'z-index': 100 });
+                        linkTN2.css({ opacity: 1, 'z-index': 300 });
                     }, false);
                     
                     document.addEventListener('showLinkToNode3', function(evt) {
                         linkTN1.css({ 'z-index': 1 });
                         linkTN2.css({ 'z-index': 1 });
-                        linkTN3.css({ opacity: 1, 'z-index': 100 });
+                        linkTN3.css({ opacity: 1, 'z-index': 300 });
                     }, false);
                     
                     // click events
                     linkTN1.on('click', function(evt) {
                         evt.preventDefault();
                         
-                        // setup canvas
-                        NNode.init();
-                        
-                        Movie.minimize();
-                        NNode.showNode1();
+                        movie.minimize();
+                        node1.play();
+                        linkTN1.css({ opacity: 0 });
                     });
                     
                     linkTN2.on('click', function(evt) {
                         evt.preventDefault();
                         
-                        Movie.minimize();
-                        NNode.showNode2();
+                        movie.minimize();
+                        node2.play();
+                        linkTN2.css({ opacity: 0 });
                     });
                     
                     linkTN3.on('click', function(evt) {
                         evt.preventDefault();
                         
-                        Movie.minimize();
-                        NNode.showNode3();
+                        movie.minimize();
+                        node3.play();
+                        linkTN3.css({ opacity: 0 });
                     });
                     
-                    Movie.movie.on('click', function(evt) {
+                    movie.movie.on('click', function(evt) {
                         evt.preventDefault();
                         
                         linkTN1.css({ opacity: 0 });
                         linkTN2.css({ opacity: 0 });
                         linkTN3.css({ opacity: 0 });
+                
+                        $('#output').css({ opacity: 0 });
                         
-                        Movie.maximize();
-                        NNode.reset();
-                        Timing.pop.play();
+                        movie.maximize();
+                        timing.playMain();
                     });
                     
                     /*******************************************************************
                     *  START
                     *******************************************************************/
-                    Timing.init();
-
+                    $('#submit').on('click', function(evt) {
+                        
+                        var timing1 = $('#timing1').val(),
+                            timing2 = $('#timing2').val(),
+                            timing3 = $('#timing3').val();
+                            
+                        var timingOptions = {
+                            node1: timing1,
+                            node2: timing2,
+                            node3: timing3
+                        };
+                        
+//                        timing = new Timing();
+                        timing.init(timingOptions);
+                        timing.playMain();
+                        
+                    });
+                    
                 });
             })(jQuery);
-        
         </script>
+    </head>
+    <body>
+        <canvas id="buffer" width="960" height="540"></canvas>
+        <div id="wrap">
+            <video id="node1Animation">
+                <source src="videos/node1/node1.mp4">
+                <source src="videos/node1/node1.ogv">
+                <source src="videos/node1/node1.webm">
+            </video>
+            <video id="beeVideo">
+                <source src="videos/main/tall.mp4">
+                <source src="videos/main/tall.ogv">
+                <source src="videos/main/tall.webm">
+            </video>
+            <canvas id="output" width="960" height="540"></canvas>
+            <a href="#" id="linkToNode1">Node 1</a>
+            <a href="#" id="linkToNode2">Node 2</a>
+            <a href="#" id="linkToNode3">Node 3</a>
+        </div>
+        
+<!--        <div id="form">
+            <input type="text" name="timing1" id="timing1" />
+            <input type="text" name="timing2" id="timing2" />
+            <input type="text" name="timing3" id="timing3" />
+            <button id="submit">Submit</button>
+        </div>-->
     </body>
 </html>
