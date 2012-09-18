@@ -1,0 +1,185 @@
+<!-- 
+    Author: Mike Newell © 2012
+-->
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <script>
+            // shim layer with setTimeout fallback
+//    window.requestAnimFrame = (function(){
+//      return  window.requestAnimationFrame       || 
+//              window.webkitRequestAnimationFrame || 
+//              window.mozRequestAnimationFrame    || 
+//              window.oRequestAnimationFrame      || 
+//              window.msRequestAnimationFrame     || 
+//              function( callback ){
+//                window.setTimeout(callback, 1000 / 60);
+//              };
+//    })();
+
+            (function() {
+                var lastTime = 0;
+                var vendors = ['ms', 'moz', 'webkit', 'o'];
+                for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+                    window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
+                    window.cancelAnimationFrame = 
+                      window[vendors[x]+'CancelAnimationFrame'] || window[vendors[x]+'CancelRequestAnimationFrame'];
+                }
+
+                if (!window.requestAnimationFrame)
+                    window.requestAnimationFrame = function(callback, element) {
+                        var currTime = new Date().getTime();
+                        var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+                        var id = window.setTimeout(function() { callback(currTime + timeToCall); }, 
+                          timeToCall);
+                        lastTime = currTime + timeToCall;
+                        return id;
+                    };
+
+                if (!window.cancelAnimationFrame)
+                    window.cancelAnimationFrame = function(id) {
+                        clearTimeout(id);
+                    };
+            }());
+        </script>
+        <style>
+            #wrap {
+                width: 100%;
+                background-color: none;
+                position: relative;
+            }
+            
+            #frames {
+                position: relative;
+            }
+            
+            #frames img {
+                position: absolute;
+                top: 0;
+                left: 0;
+            }
+            
+            #anim {
+                position: absolute;
+                top: 0;
+                left: 0;
+            }
+            
+            #canvas {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 1920px;
+                height: 1080px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="wrap">
+            
+            <div id="frames">
+                <img src="http://worktogether.cisco.com/img/frames/1920x1080/hd/0000.jpg" />
+            </div>
+            <div id="anim">
+                <img id="frame" src="" />
+                <canvas id="canvas" width="1920" height="1080"></canvas>
+            </div>
+        </div>
+        <script>
+            (function($) {
+                $(window).load(function() {
+                    
+                    var frame = $('#frame'),
+                        frames = $('#frames'),
+                        count = 0,
+                        add = 1,
+                        animFrame;
+                        
+                    var prepend = function() {
+                        var s = pad(count);
+                        frames.prepend('<img id="'+count+'" src="http://worktogether.cisco.com/img/frames/1920x1080/hd/'+s+'.jpg" />');
+                        if(count < 30) {
+                            count++;
+                        } else {
+                            cancelAnimationFrame(animFrame);
+                            alert("starting animation");
+                            renderLoop();
+                        }
+                    };
+                    
+                    var prependLoop = function() {
+                        animFrame = requestAnimationFrame(prependLoop);
+                        prepend();
+                    };
+                    
+                    var renderLoop = function() {
+                        animFrame = requestAnimationFrame(renderLoop);
+//                        animFrame = setInterval(function() {
+//                            renderLoop();
+//                        }, 1000/10);
+                        render();
+                    };
+                    
+                    var render = function() {
+                        
+                        var s = pad(count);
+                        
+                        var buffer = document.createElement('canvas');
+                        var canvas = document.getElementById('canvas');
+                        var image = new Image();
+                        image.width = 1920;
+                        image.height = 1080;
+                        image.src = 'http://worktogether.cisco.com/img/frames/1920x1080/hd/'+s+'.jpg';
+                        buffer.width = canvas.width;
+                        buffer.height = canvas.height;
+                        
+                        var bufferCtx = buffer.getContext('2d');
+                        var ctx = canvas.getContext('2d');
+                        
+                        bufferCtx.drawImage(image, 0, 0);
+                        ctx.drawImage(buffer, 0, 0);
+                        
+                        if(count == 0 || count == 30) {
+                            add = add * -1;
+                        }
+                        
+                        count += add;
+                        
+                    };
+                    
+//                    var render = function() {
+//                        
+//                        var f = frame;
+//                        
+//                        var s = pad(count);
+//                        
+//                        f.attr({'src' : 'http://worktogether.cisco.com/img/frames/1920x1080/hd/'+s+'.jpg'});
+//                        
+//                        if(count == 0 || count == 30) {
+//                            add = add * -1;
+//                        }
+//                        
+//                        count += add;
+//                        
+//                    };
+                    
+                    var pad = function (num) {
+                        var s = "000000000" + num;
+                        return s.substr(s.length-4);
+                    };
+                    
+                    alert('buffering - hold on');
+                    prependLoop();
+                    
+                });
+            })(jQuery);
+        </script>
+    </body>
+</html>

@@ -1,0 +1,147 @@
+<!-- 
+    Author: Mike Newell © 2012
+-->
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/jquery.js"><\/script>')</script>
+        <script>
+            window.requestAnimFrame = (function(){
+                return  window.requestAnimationFrame       || 
+                        window.webkitRequestAnimationFrame || 
+                        window.mozRequestAnimationFrame    || 
+                        window.oRequestAnimationFrame      || 
+                        window.msRequestAnimationFrame     || 
+                        function(/* function */ callback, /* DOMElement */ element){
+                          window.setTimeout(callback, 1000 / 60);
+                        };
+              })();
+
+        </script>
+        <style>
+            @media only screen and (device-width: 768px) {
+                /* For general iPad layouts */
+                
+            }
+
+            @media only screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait) {
+                /* For portrait layouts only */
+                
+            }
+
+            @media only screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape) {
+                /* For landscape layouts only */
+                
+            }
+            
+            #wrap {
+                position: relative;
+            }
+            
+            #bgVid {
+                /*width: 768px;*/
+                
+/*                position: absolute;
+                top: 0;
+                left: 0;*/
+            }
+            
+            #animation {
+                width: 100%;
+                
+                position: absolute;
+                top: 0;
+                left: 0;
+            }
+            
+            
+        </style>
+    </head>
+    <body>
+        <!-- http://localhost.com/GSP/clients/cisco/ipad-bee/ -->
+        <div id="wrap">
+            <video id="bgVid" width="100%" height="100%">
+                <source src="videos/cisco.mp4" type="video/mp4" />
+                <source src="videos/cisco.ogv" type="video/ogg" />
+                <source src="videos/cisco.webm" type="video/ogg" />
+                Your browser does not support the video tag.
+            </video>
+            <div id="animation">
+                <img src="images/bee/bee0001.png" />
+            </div>
+        </div>
+        <script>
+            (function($) {
+                
+                //TODO: add jquery event for touch/swipe - then animate according to x value
+                
+                // faux: should get starting x and compute difference between drags, then get current frame of movie and animate according to movie
+                /*      
+                 *      on(touchstart) {
+                 *          getX;
+                 *      }
+                 *      
+                 *      on(touchdrag) {
+                 *          getNewX;
+                 *          setVal = newX - x;
+                 *          newFrame = currentFrame + setVal
+                 *          animateToNextFrame();
+                 *      }
+                 *      
+                 *      on(touchend) {
+                 *          setX = 0
+                 *      }
+                */
+                
+                $(window).load(function() {
+                    var v = $('#bgVid')[0],
+                        a = $('#animation img'),
+                        w = $('#wrap'),
+                        count = 1;
+                    
+                    v.volume = 0.1;
+                    
+                    w.on('touchstart', function() {
+                        v.play();
+                        animate();
+                    });
+                    
+                    function getNum() {
+                        var str;
+                        
+                        if(count < 10) {
+                            str = '000' + count;
+                        } else if(count >= 10 && count < 100) {
+                            str = '00' + count;
+                        } else if(count >= 100 && count < 301) {
+                            str = '0' + count;
+                        } else {
+                            count = 1;
+                        }
+                        
+                        return str;
+                    }
+                    
+                    function draw() {
+                        count++;
+                        a.attr({ 'src' : 'images/bee/bee'+getNum()+'.png' });
+                    }
+                    
+                    function animate() {
+                        requestAnimFrame( animate );
+                        draw();
+                    }
+                    
+                    
+                });
+            })(jQuery);
+        </script>
+    </body>
+</html>
