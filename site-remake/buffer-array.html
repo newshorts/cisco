@@ -85,7 +85,7 @@ and open the template in the editor.
         <div id="wrap">
             
             <div id="frames">
-                <img src="http://worktogether.cisco.com/img/frames/1920x1080/hd/0000.jpg" />
+                <!--<img src="http://worktogether.cisco.com/img/frames/1920x1080/hd/0000.jpg" />-->
             </div>
             <div id="anim">
                 <img id="frame" src="" />
@@ -101,90 +101,110 @@ and open the template in the editor.
             (function($) {
                 $(window).load(function() {
                     
-                    var frame = $('#frame'),
-                        frames = $('#frames'),
-                        count = 0,
-                        add = 1,
+                    var bufferArr = new Array(),
+                        imgArr = new Array(),
                         animFrame,
-                        imageNum = 60;
+                        add = 1,
+                        frameCount, 
+                        loadedImages = 1;
+                    
+                    var addToImagesArr = function(imgCount) {
                         
-                    var prepend = function() {
-                        var s = pad(count);
-                        frames.prepend('<img id="'+count+'" src="http://worktogether.cisco.com/img/frames/1920x1080/hd/'+s+'.jpg" />');
-                        if(count < imageNum) {
-                            count++;
-                        } else {
-                            cancelAnimationFrame(animFrame);
-                            alert("starting animation");
-                            renderLoop();
+                        for(var i = 0; i < imgCount; i++) {
+                            // get padded number
+                            var s = pad(i);
+                            
+                            // make a new image
+                            var img = new Image();
+                            img.width = 1920;
+                            img.height = 1080;
+                            img.src = 'http://worktogether.cisco.com/img/frames/1920x1080/hd/'+s+'.jpg'
+                            
+                            img.onload = handleLoadedImages;
+
+                            imgArr.push(img);
+
+                            delete img;
+                            
                         }
+                        
+                        if(imgArr.length > 1) {
+                            console.log("Image Array");
+                            console.dir(imgArr);
+                            alert('added images');
+                        }
+                        
                     };
                     
-                    var prependLoop = function() {
-                        animFrame = requestAnimationFrame(prependLoop);
-                        prepend();
-                    };
+                    var handleLoadedImages = function() {
+                        ++loadedImages;
+                        
+                        if(loadedImages == imgArr.length) {
+                            addImagesToBuffer();
+                        }
+                    }
                     
-                    var renderLoop = function() {
-                        animFrame = requestAnimationFrame(renderLoop);
-//                        animFrame = setInterval(function() {
-//                            renderLoop();
-//                        }, 1000/10);
-                        render();
-                    };
+                    var addImagesToBuffer = function() {
+                        var imgCount = imgArr.length;
+                        for(var i = 0; i < imgCount; i++) {
+                            // make a new canvas element
+                            var buffer = document.createElement('canvas');
+                            buffer.width = imgArr[i].width;
+                            buffer.height = imgArr[i].height;
+                            var bufferCtx = buffer.getContext('2d');
+                            
+                            // draw the image to the new canvas elem
+                            console.log(imgArr[i]);
+                            bufferCtx.drawImage(imgArr[i], 0, 0);
+                            
+                            // add the canvas to the buffer array
+                            bufferArr.push(buffer);
+                            
+                            delete window.buffer;
+                            delete this.buffer;
+                            delete this.bufferCtx;
+                            
+                        }
+                        
+                        frameCount = bufferArr.length;
+                        
+                        if(bufferArr.length > 1) {
+                            renderLoop();
+                            console.log("Buffer Array");
+                            console.dir(bufferArr);
+                            alert('images buffered');
+                        }
+                    }
                     
                     var render = function() {
                         
-                        var s = pad(count);
-                        
-                        var buffer = document.createElement('canvas');
                         var canvas = document.getElementById('canvas');
-                        var image = new Image();
-                        image.width = 1920;
-                        image.height = 1080;
-                        image.src = 'http://worktogether.cisco.com/img/frames/1920x1080/hd/'+s+'.jpg';
-                        buffer.width = canvas.width;
-                        buffer.height = canvas.height;
-                        
-                        var bufferCtx = buffer.getContext('2d');
                         var ctx = canvas.getContext('2d');
                         
-                        bufferCtx.drawImage(image, 0, 0);
-                        delete this.image;
-                        ctx.drawImage(buffer, 0, 0);
-                        delete window.buffer;
+                        var len = bufferArr.length;
                         
-                        if(count == 0 || count == imageNum) {
-                            add = add * -1;
+                        if(frameCount == 0 || frameCount == len) {
+                            add *= -1;
                         }
                         
-                        count += add;
+                        frameCount += add;
                         
-                    };
+                        ctx.drawImage(bufferArr[frameCount], 0, 0);
+                        
+                        
+                    }
                     
-//                    var render = function() {
-//                        
-//                        var f = frame;
-//                        
-//                        var s = pad(count);
-//                        
-//                        f.attr({'src' : 'http://worktogether.cisco.com/img/frames/1920x1080/hd/'+s+'.jpg'});
-//                        
-//                        if(count == 0 || count == 30) {
-//                            add = add * -1;
-//                        }
-//                        
-//                        count += add;
-//                        
-//                    };
+                    var renderLoop = function() {
+                        animFrame = requestAnimationFrame(renderLoop);
+                        render();
+                    }
                     
-                    var pad = function (num) {
+                    var pad = function(num) {
                         var s = "000000000" + num;
                         return s.substr(s.length-4);
-                    };
+                    }
                     
-                    alert('buffering - hold on');
-                    prependLoop();
+                    addToImagesArr(311);
                     
                 });
             })(jQuery);

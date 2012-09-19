@@ -1,0 +1,85 @@
+<!-- 
+    Author: Mike Newell © 2012
+-->
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <script>
+            (function() {
+                var lastTime = 0;
+                var vendors = ['ms', 'moz', 'webkit', 'o'];
+                for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+                    window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
+                    window.cancelAnimationFrame = 
+                      window[vendors[x]+'CancelAnimationFrame'] || window[vendors[x]+'CancelRequestAnimationFrame'];
+                }
+
+                if (!window.requestAnimationFrame)
+                    window.requestAnimationFrame = function(callback, element) {
+                        var currTime = new Date().getTime();
+                        var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+                        var id = window.setTimeout(function() { callback(currTime + timeToCall); }, 
+                          timeToCall);
+                        lastTime = currTime + timeToCall;
+                        return id;
+                    };
+
+                if (!window.cancelAnimationFrame)
+                    window.cancelAnimationFrame = function(id) {
+                        clearTimeout(id);
+                    };
+            }());
+        </script>
+        <style>
+            #wrap {
+                width: 100%;
+                background-color: none;
+                position: relative;
+            }
+            
+            #frames {
+                position: relative;
+            }
+            
+            #frames img {
+                position: absolute;
+                top: 0;
+                left: 0;
+            }
+            
+            #anim {
+                position: absolute;
+                top: 0;
+                left: 0;
+            }
+            
+            #canvas {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 1920px;
+                height: 1080px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="wrap">
+            
+            <div id="frames">
+                <!--<img src="http://worktogether.cisco.com/img/frames/1920x1080/hd/0000.jpg" />-->
+            </div>
+            <div id="anim">
+                <img id="frame" src="" />
+                <canvas id="canvas" width="1920" height="1080"></canvas>
+            </div>
+        </div>
+        <script src="js/buffer.min.js"></script>
+    </body>
+</html>
