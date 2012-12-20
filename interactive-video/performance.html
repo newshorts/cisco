@@ -1,0 +1,186 @@
+<!-- 
+    Author: Mike Newell © 2012
+-->
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>CISCO :: Interactive Video Demo</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" type="text/css" href="css/reset.css" />
+        <link rel="stylesheet" type="text/css" href="css/style.css" />
+    </head>
+    <body>
+        <header>
+            
+        </header>
+        <section>
+            <div id="wrap">
+                <div id="innerWrap">
+                    <div id="bike" class="video">
+                        <div class="videoWrap">
+                            <video preload autoplay loop>
+                                <source src="videos/bike.mp4" type="video/mp4">
+                                <source src="videos/bike.ogg" type="video/ogg">
+                                <source src="videos/bike.webmhd.webm" type="video/webm">
+                                Your browser does not support the video tag.
+                            </video>
+                            <div class="videoOverlay"></div>
+                        </div>
+                    </div>
+                    <div id="ambulance" class="video">
+                        <div class="videoWrap">
+                            <video preload autoplay loop>
+                                <source src="videos/siren.mp4" type="video/mp4">
+                                <source src="videos/siren.ogg" type="video/ogg">
+                                <source src="videos/siren.webmhd.webm" type="video/webm">
+                                Your browser does not support the video tag.
+                            </video>
+                            <div class="videoOverlay"></div>
+                        </div>
+                    </div>
+                    <div id="roundabout" class="video">
+                        <div class="videoWrap">
+                            <video preload autoplay loop>
+                                <source src="videos/roundabout.mp4" type="video/mp4">
+                                <source src="videos/roundabout.ogg" type="video/ogg">
+                                <source src="videos/roundabout.webmhd.webm" type="video/webm">
+                                Your browser does not support the video tag.
+                            </video>
+                            <div class="videoOverlay"></div>
+                        </div>
+                    </div>
+                    <div id="checklist" class="video">
+                        <video></video>
+                    </div>
+                    <div id="blood" class="video">
+                        <video></video>
+                    </div>
+                    <div id="surgeon" class="video">
+                        <video></video>
+                    </div>
+                </div>
+                <div id="popup">
+                    <div id="blackout"></div>
+                    <div id="popupContent">
+                        <h1>Impact Sensor Alert</h1>
+                        <p>Sensors in the rider's bike helmet sent out an alert to nearby hospitals that there had been a crash.</p>
+                        <p>In Cisco's public works project, "Connecting Sichuan," Cisco enabled hospital systems to be notified when alerts went off, so ambulances could be dispatched immediately. This save time and helped patients get care if they weren't able to call for it.</p>
+                    </div>
+                    <a href="#" id="x"><img src="images/x.png" /></a>
+                </div>
+                <div id="overlay"></div>
+                <a href="#" id="overlayPlay"><img src="images/play.png" /></a>
+            </div>
+        </section>
+        <footer>
+            
+        </footer>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+        <script>
+            (function($) {
+                $(window).load(function() {
+                    var bikeVid = $('#bike video'),
+                        sirenVid = $('#ambulance video'),
+                        roundaboutVid = $('#roundabout video');
+                        
+                    var _bike = bikeVid[0],
+                        _siren = sirenVid[0],
+                        _round = roundaboutVid[0];
+                        
+                    var allVideos = $('video');
+                        
+//                    // roundabout
+//                    roundaboutVid.on('ended', function(evt) {
+//                        fadeOut('#roundabout .videoOverlay');
+//                    });
+//                    
+//                    // siren
+//                    sirenVid.on('ended', function(evt) {
+//                        
+//                        fadeOut('#ambulance .videoOverlay');
+//                        
+//                        showPopup();
+//                    });
+//                    
+//                    $('#popup').on('webkitTransitionEnd oTransitionEnd transitionend', function(evt) {
+//                        if(evt.originalEvent.propertyName == 'opacity') {
+//                            
+//                            if($(this).css('opacity') == 0) {
+//                                $(this).css({display: 'none'});
+//                            }
+//                            
+//                        }
+//                    });
+//                    
+//                    $('#x').on('click', function(evt) {
+//                        
+//                        evt.preventDefault();
+//                        
+//                        $('#popup').css({opacity: 0});
+//                        
+//                        setTimeout(function() {
+//                            fadeIn('#roundabout .videoOverlay');
+//                            _round.play();
+//                        }, 500);
+//                    });
+//                    
+//                    var showPopup = function() {
+//                        $('#popup').css({opacity: 1});
+//                    };
+//                    
+//                    //bike
+//                    bikeVid.on('ended', function(evt) {
+//                        
+//                        fadeOut('#bike .videoOverlay');
+//                        
+//                    });
+//                    
+//                    bikeVid.on('timeupdate', function() {
+//                        var vidTime = parseInt(_bike.currentTime);
+//                        
+//                        if(vidTime === 11) {
+//                            
+//                            fadeIn('#ambulance .videoOverlay');
+//                            _siren.play();
+//                            
+//                        }
+//                        
+//                        
+//                    });
+                    
+                    // overlay
+                    $('#overlay').on('webkitTransitionEnd oTransitionEnd transitionend', function(evt) {
+                        console.dir(evt)
+                        // if we faded it out, then remove the element
+                        if(evt.originalEvent.propertyName == 'opacity') {
+                            $(this).remove();
+                        }
+                    });
+                    
+                    // overlayPlay
+                    $('#overlayPlay').on('click', function(evt) {
+                        evt.preventDefault();
+                        $(this).remove();
+                        fadeIn('#overlay');
+                        
+//                        fadeIn('#bike .videoOverlay');
+                        _bike.play();
+                    });
+                        
+                    var fadeOut = function(selector) {
+                        $(selector).css({opacity: .5});
+                    };
+                    
+                    var fadeIn = function(selector) {
+                        $(selector).css({opacity: 0});
+                    }
+                    
+                });
+            })(jQuery);
+        </script>
+    </body>
+</html>

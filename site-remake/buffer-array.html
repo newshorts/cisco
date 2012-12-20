@@ -79,6 +79,15 @@ and open the template in the editor.
                 width: 1920px;
                 height: 1080px;
             }
+            
+            #status {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                
+                display: block;
+                width: 100px;
+            }
         </style>
     </head>
     <body>
@@ -91,6 +100,9 @@ and open the template in the editor.
                 <img id="frame" src="" />
                 <canvas id="canvas" width="1920" height="1080"></canvas>
             </div>
+            
+            <h3 id="status"></h3>
+            
         </div>
         <script>
             
@@ -139,32 +151,74 @@ and open the template in the editor.
                     var handleLoadedImages = function() {
                         ++loadedImages;
                         
+                        $('#status').text('loading: ' + loadedImages);
+                        
                         if(loadedImages == imgArr.length) {
                             addImagesToBuffer();
                         }
                     }
                     
                     var addImagesToBuffer = function() {
+                        console.dir(this);
                         var imgCount = imgArr.length;
-                        for(var i = 0; i < imgCount; i++) {
-                            // make a new canvas element
-                            var buffer = document.createElement('canvas');
-                            buffer.width = imgArr[i].width;
-                            buffer.height = imgArr[i].height;
-                            var bufferCtx = buffer.getContext('2d');
-                            
-                            // draw the image to the new canvas elem
-                            console.log(imgArr[i]);
-                            bufferCtx.drawImage(imgArr[i], 0, 0);
-                            
-                            // add the canvas to the buffer array
-                            bufferArr.push(buffer);
-                            
-                            delete window.buffer;
-                            delete this.buffer;
-                            delete this.bufferCtx;
-                            
-                        }
+                        var imgArr = imgArr;
+                        var bufferArr = bufferArr;
+//                        for(var i = 0; i < imgCount; i++) {
+//                            
+//                            console.log('buffering: ' + i);
+//                            $('#status').text('buffering: ' + i);
+//                            
+//                            // make a new canvas element
+//                            var buffer = document.createElement('canvas');
+//                            buffer.width = imgArr[i].width;
+//                            buffer.height = imgArr[i].height;
+//                            var bufferCtx = buffer.getContext('2d');
+//                            
+//                            // draw the image to the new canvas elem
+////                            console.log(imgArr[i]);
+//                            
+//                            bufferCtx.drawImage(imgArr[i], 0, 0);
+//                            
+//                            // add the canvas to the buffer array
+//                            bufferArr.push(buffer);
+//                            
+//                            delete window.buffer;
+//                            delete this.buffer;
+//                            delete this.bufferCtx;
+//                            
+//                            
+//                            
+//                        }
+
+                        var self = this;
+                        
+                        (function myLoop (i) {          
+                            setTimeout(function () {   
+                                
+                                console.log('buffering: ' + i);
+                                $('#status').text('buffering: ' + i);
+
+                                // make a new canvas element
+                                var buffer = document.createElement('canvas');
+                                buffer.width = imgArr[i].width;
+                                buffer.height = imgArr[i].height;
+                                var bufferCtx = buffer.getContext('2d');
+
+                                // draw the image to the new canvas elem
+    //                            console.log(imgArr[i]);
+
+                                bufferCtx.drawImage(imgArr[i], 0, 0);
+
+                                // add the canvas to the buffer array
+                                self.bufferArr.push(buffer);
+
+                                delete window.buffer;
+                                delete this.buffer;
+                                delete this.bufferCtx;
+                                
+                                if (--i) myLoop(i);
+                            }, 100);
+                        })(imgCount);
                         
                         frameCount = bufferArr.length;
                         

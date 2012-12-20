@@ -1,0 +1,247 @@
+/* 
+    Document   : style
+    Created on : Dec 18, 2012, 6:59:43 PM
+    Author     : mike_newell
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+root { 
+    display: block;
+}
+
+body {
+    background: rgb(214,214,214); /* Old browsers */
+    background: -moz-linear-gradient(top, rgba(214,214,214,1) 0%, rgba(246,246,246,1) 19%, rgba(255,255,255,1) 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(214,214,214,1)), color-stop(19%,rgba(246,246,246,1)), color-stop(100%,rgba(255,255,255,1))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, rgba(214,214,214,1) 0%,rgba(246,246,246,1) 19%,rgba(255,255,255,1) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, rgba(214,214,214,1) 0%,rgba(246,246,246,1) 19%,rgba(255,255,255,1) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, rgba(214,214,214,1) 0%,rgba(246,246,246,1) 19%,rgba(255,255,255,1) 100%); /* IE10+ */
+    background: linear-gradient(to bottom, rgba(214,214,214,1) 0%,rgba(246,246,246,1) 19%,rgba(255,255,255,1) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d6d6d6', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
+}
+
+header, footer {
+    width: 100%;
+    min-width: 1280px;
+}
+
+header {
+    height: 118px;
+    background: black url(../images/header.png) center center scroll no-repeat;
+}
+
+footer {
+    height: 58px;
+    background: black url(../images/footer.png) center center scroll no-repeat;
+}
+
+#wrap {
+    width: 1280px;
+    height: 645px;
+    margin: 0 auto;
+    position: relative;
+    background: white url(../images/bg-scaffold.png) scroll no-repeat;
+    margin-top: 50px;
+    margin-bottom: 6%;
+    padding: 10px;
+}
+
+#overlay {
+    width: 1280px;
+    height: 645px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: .5;
+    background: black;
+    
+    transition: opacity .5s linear;
+    -moz-transition: opacity .5s linear;
+    -webkit-transition: opacity .5s linear;
+    -o-transition: opacity .5s linear;
+}
+
+#overlayPlay {
+    width: 1280px;
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#overlayPlay img {
+    opacity: .4;
+    
+    transition: opacity .5s linear;
+    -moz-transition: opacity .5s linear;
+    -webkit-transition: opacity .5s linear;
+    -o-transition: opacity .5s linear;
+}
+
+#overlayPlay img:hover {
+    opacity: .8;
+}
+
+#innerWrap {
+    position: relative;
+    width: 1260px;
+    height: 625px;
+}
+
+.video {
+    position: absolute;
+}
+
+.videoWrap {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.videoOverlay {
+    background-color: black;
+    opacity: .5;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    
+    transition: opacity .5s linear;
+    -moz-transition: opacity .5s linear;
+    -webkit-transition: opacity .5s linear;
+    -o-transition: opacity .5s linear;
+}
+
+#bike {
+    width: 765px;
+    height: 401px;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    /*background-color: red;*/
+}
+
+#bike video {
+    width: 765px;
+    height: 401px;
+}
+
+#ambulance {
+    width: 243px;
+    height: 219px;
+    bottom: 0;
+    left: 0;
+    overflow: hidden;
+    /*background-color: red;*/
+}
+
+#ambulance video {
+    width: 243px;
+    height: 219px;
+}
+
+#roundabout {
+    width: 516px;
+    height: 219px;
+    top: 406px;
+    left: 249px;
+    overflow: hidden;
+    /*background-color: red;*/
+}
+
+#roundabout video {
+    width: 516px;
+    height: 219px;
+}
+
+#checklist {
+    width: 489px;
+    height: 219px;
+    top: 0;
+    right: 0;
+    overflow: hidden;
+    /*background-color: red;*/
+}
+
+#surgeon {
+    postion: absolute;
+    top: 224px;
+    left: 771px;
+    width: 180px;
+    height: 177px;
+    overflow: hidden;
+    /*background-color: red;*/
+    
+/*    border-right: white 5px solid;
+    border-bottom: white 5px solid;*/
+}
+
+#blood {
+    width: 489px;
+    height: 401px;
+    bottom: 0;
+    right: 0;
+    overflow: hidden;
+    /*background-color: green;*/
+}
+
+/* popup content */
+
+#popup {
+    width: 1280px;
+    height: 645px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    
+    transition: opacity .3s linear;
+    -moz-transition: opacity .3s linear;
+    -webkit-transition: opacity .3s linear;
+    -o-transition: opacity .3s linear;
+}
+
+#blackout {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background-color: black;
+    opacity: .7;
+    
+    transition: opacity .5s linear;
+    -moz-transition: opacity .5s linear;
+    -webkit-transition: opacity .5s linear;
+    -o-transition: opacity .5s linear;
+}
+
+#popupContent {
+    position: relative;
+    left: 0;
+    width: 60%;
+    height: 80%;
+    
+    padding: 10% 20%;
+}
+
+#popupContent h1 {
+    text-align: center;
+}
+
+#popupContent p {
+    text-align: left;
+    margin-left: 50px;
+    margin-right: 50px;
+}
+
+#x {
+    display: block;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+#x img {
+    opacity: .7;
+}
