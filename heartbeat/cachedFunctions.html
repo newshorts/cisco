@@ -1,0 +1,79 @@
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script>
+            (function(window) {
+                
+                var getNameFunc = function() {
+                    var name = this.name;
+                    console.log(name)
+                };
+                
+                var setNameFunc = function(name) {
+                    this.name = name;
+                };
+                
+                var Person = function(name) {
+                    return {
+                        name: name,
+                        setName: setNameFunc,
+                        getName: getNameFunc
+                    };
+                };
+                
+                var Mike = new Person('Mike');
+                console.dir(Mike)
+                Mike.getName();
+                Mike.setName('Felix');
+                console.dir(Mike)
+                Mike.getName();
+                Mike.setName('Mike');
+                console.dir(Mike)
+                Mike.getName();
+                
+                
+                var Alien = function(name) {
+                    var name = name;
+                    
+                    var getName = function() {
+                        console.log(name);
+                    }
+                    
+                    var setName = function(name) {
+                        console.dir(this)
+                        name = name;
+                    };
+                    
+                    return {
+                        getName: getName,
+                        setName: setName,
+                        name: name
+                    }
+                };
+                
+                var Beebop = new Alien('BeepBop');
+                console.dir(Beebop)
+                Beebop.getName();
+                Beebop.setName('Felix');
+                console.dir(Beebop)
+                Beebop.getName();
+                Beebop.setName('BeepBop');
+                console.dir(Beebop)
+                Beebop.getName();
+                
+                
+            })(window);
+        </script>
+    </head>
+    <body>
+        <div>
+            
+        </div>
+    </body>
+</html>
