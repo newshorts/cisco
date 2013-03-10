@@ -1,0 +1,110 @@
+<!-- 
+    Author: Mike Newell © 2012
+-->
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <script>
+            (function($) {
+                $(window).load(function() {
+                    
+                    var box1 = $('.box1');
+                    var box2 = $('.box2');
+                    
+                    var yesBox1 = false,
+                        yesBox2 = false;
+                        
+                    box1.on('touchstart', function(evt) {
+                        yesBox1 = true;
+                        $(window).trigger('checkYeses');
+                    });
+                    
+                    box2.on('touchstart', function(evt) {
+                        yesBox2 = true;
+                        $(window).trigger('checkYeses');
+                    });
+                    
+                    
+                    box1.on('touchend', function(evt) {
+                        yesBox1 = false;
+                        $(window).trigger('checkYeses');
+                    });
+                    
+                    box2.on('touchend', function(evt) {
+                        yesBox2 = false;
+                        $(window).trigger('checkYeses');
+                    });
+                    
+                    $(window).on('checkYeses', function(evt) {
+                        if(yesBox1 && yesBox2) {
+                            alert('playing heart rate');
+                        }
+                        
+                        if(!yesBox1 && !yesBox2) {
+                            alert('playing flatline');
+                        }
+                    });
+                    
+                    
+//                    box.on('touchstart', function(evt) {
+//                        for(var i = 0; i < evt.touches.length; i++) {
+//                            var touch = evt.targetTouches[i];
+//                            
+//                            var yesX = false,
+//                                yesY = false;
+//                            
+//                            if(touch.pageX > 100 && touch.pageX < 200) {
+//                                // do something
+//                                yesX = true;
+//                            }
+//                            
+//                            if(touch.pageY > 100 && touch.pageY < 200) {
+//                                // do something
+//                                yesY = true;
+//                            }
+//                            
+//                            if(yesX && yesY) {
+//                                
+//                            }
+//                        }
+//                    });
+//                    
+//                    box.on('touchend', function(evt) {
+//                        
+//                    });
+                    
+                });
+            })(jQuery);
+        </script>
+        <style>
+            
+            .box {
+                width: 100px;
+                height: 100px;
+                background-color: #444;
+                margin: 10px;
+            }
+            
+            .box1 {
+                float: left;
+            }
+            
+            .box2 {
+                float: right;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="wrap">
+            <div class="box box1"></div>
+            <div class="box box2"></div>
+        </div>
+    </body>
+</html>
