@@ -1,0 +1,234 @@
+<!-- 
+    Author: Mike Newell © 2012
+-->
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" type="text/css" href="css/reset.css" />
+        <style>
+            
+            body {
+                background-color: black;
+            }
+            
+            #wrap {
+                width: 1024px;
+                /*height: 704px;*/
+                margin: 100px auto;
+                position: relative;
+                border: 2px solid #ccc;
+            }
+            
+            .imgContainer {
+/*                width: 3072px;
+                height: 2112px;*/
+                width: 1024px;
+                left: 704px;
+                position: relative;
+                top: -704px;
+                left: -1024px;
+            }
+            
+            .imgContainer img {
+                width: 100%;
+                /*height: 704px;*/
+                /*position: absolute;*/
+            }
+            
+            .slide {
+                transition: top .333s linear, left .333s linear;
+                -moz-transition: top .333s linear, left .333s linear;
+                -webkit-transition: top .333s linear, left .333s linear;
+                -o-transition: top .333s linear, left .333s linear;
+
+                transform: translate3d(0,0,0);
+                -webkit-transform: translate3d(0,0,0);
+                -moz-transform: translate3d(0,0,0);
+            }
+            
+            .notransition,
+            .notransition .slide {
+                -webkit-transition-duration: 0 !important;
+                    -moz-transition-duration: 0 !important;
+                     -ms-transition-duration: 0 !important;
+                         transition-duration: 0 !important;
+
+                 -webkit-transition-delay: 0 !important;
+                    -moz-transition-delay: 0 !important;
+                     -ms-transition-delay: 0 !important;
+                         transition-delay: 0 !important;
+            }
+            
+            .slide{
+                left:-100%;
+                height:0;
+                overflow:hidden;
+                z-index:1;
+                -webkit-transition-property:left,height;
+                -moz-transition-property:left,height;
+                -ms-transition-property:left,height;
+                -o-transition-property:left,height;
+                transition-property:left,height;
+                -webkit-transition-duration:333ms;
+                -moz-transition-duration:333ms;
+                -ms-transition-duration:333ms;
+                -o-transition-duration:333ms;
+                transition-duration:333ms;
+                -webkit-transition-timing-function:cubic-bezier(0.1,0.7,0.7,1);
+                -moz-transition-timing-function:cubic-bezier(0.1,0.7,0.7,1);
+                -ms-transition-timing-function:cubic-bezier(0.1,0.7,0.7,1);
+                -o-transition-timing-function:cubic-bezier(0.1,0.7,0.7,1);
+                transition-timing-function:cubic-bezier(0.1,0.7,0.7,1);
+                -webkit-transform:translate3d(0,0,0);
+                -moz-transform:translate3d(0,0,0);
+                -ms-transform:translate3d(0,0,0);
+                -o-transform:translate3d(0,0,0);
+                transform:translate3d(0,0,0);
+            }
+            .slide.active{
+                left:0;
+                height:auto;
+                overflow:visible;
+                z-index:2;
+            }
+            .slide.active ~ .slide{
+                left:100%;
+            }
+            .slide.active ~ .slide.active{
+                left:0;
+            }
+            
+        </style>
+    </head>
+    <body>
+        <div id="wrap">
+            <div class="imgContainer wrap">
+                <img class="top slide" src="images/a.png" />
+                <img class="left slide" src="images/b.png" />
+                <img class="center active slide" src="images/c.png" />
+                <img class="right slide" src="images/d.png" />
+                <img class="bottom slide" src="images/e.png" />
+            </div>
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script src="js/jquery.event.move.js"></script>
+        <script src="js/jquery.event.swipe.js"></script>
+        <script>
+            
+            (function(jQuery, undefined) {
+                    jQuery(document).ready(function() {
+                            var wrap = jQuery('.slides_wrap'),
+                                slides = wrap.find('.img_slide'),
+                                active = slides.filter('.active'),
+                                i = slides.index(active),
+                                width = wrap.width();
+
+                            // Listen for swipe events on slides, and use a custom 'activate'
+                            // event to add and remove the class 'active' to the previous
+                            // or next slide, and to keep the index up-to-date. The class
+                            // 'active' uses CSS transitions to make the slide move.
+
+                            slides
+
+                            .on('swipeleft', function(e) {
+                                    if (i === slides.length - 1) { return; }
+                                    slides.eq(i + 1).trigger('activate');
+                            })
+
+                            .on('swiperight', function(e) {
+                                    if (i === 0) { return; }
+                                    slides.eq(i - 1).trigger('activate');
+                            })
+
+                            .on('activate', function(e) {
+                                    slides.eq(i).removeClass('active');
+
+                                    jQuery(e.target).addClass('active');
+
+                                    // Update the active slide index
+                                    i = slides.index(e.target);
+                            })
+
+                            // The code below handles what happens before any swipe event is triggered.
+                            // It makes the slides demo on this page work nicely, but really doesn't
+                            // have much to do with demonstrating the swipe events themselves. For more
+                            // on move events see:
+                            //
+                            // http://stephband.info/jquery.event.move
+
+                            .on('movestart', function(e) {
+                                    // If the movestart heads off in a upwards or downwards
+                                    // direction, prevent it so that the browser scrolls normally.
+                                    if ((e.distX > e.distY && e.distX < -e.distY) ||
+                                        (e.distX < e.distY && e.distX > -e.distY)) {
+                                            e.preventDefault();
+                                            return;
+                                    }
+
+                                    // To allow the slide to keep step with the finger,
+                                    // temporarily disable transitions.
+                                    wrap.addClass('notransition');
+                            })
+
+                            .on('move', function(e) {
+                                    var left = 100 * e.distX / width;
+
+                                    // Move slides with the finger
+                                    if (e.distX < 0) {
+                                            if (slides[i+1]) {
+                                                    slides[i].style.left = left + '%';
+                                                    slides[i+1].style.left = (left+100)+'%';
+                                            }
+                                            else {
+                                                    slides[i].style.left = left/4 + '%';
+                                            }
+                                    }
+                                    if (e.distX > 0) {
+                                            if (slides[i-1]) {
+                                                    slides[i].style.left = left + '%';
+                                                    slides[i-1].style.left = (left-100)+'%';
+                                            }
+                                            else {
+                                                    slides[i].style.left = left/5 + '%';
+                                            }
+                                    }
+                            })
+
+                            .on('moveend', function(e) {
+                                    wrap.removeClass('notransition');
+
+                                    slides[i].style.left = '';
+
+                                    if (slides[i+1]) {
+                                            slides[i+1].style.left = '';
+                                    }
+                                    if (slides[i-1]) {
+                                            slides[i-1].style.left = '';
+                                    }
+                            });
+
+                            // Make the buttons work, too. Hijack the id stored in the href and use
+                            // it to activate the slide.
+
+                            jQuery(document)
+                            .on('click', '.slide_button', function(e) {
+                                    var href = e.currentTarget.hash;
+
+                                    jQuery(href).trigger('activate');
+
+                                    e.preventDefault();
+                            });
+                    });
+            })(jQuery);	
+	
+            
+        </script>
+    </body>
+</html>
